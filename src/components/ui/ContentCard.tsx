@@ -17,6 +17,7 @@ interface Props {
   description: string;
   image: string;
   category: string;
+  url: string;
 }
 
 export default function ContentCard({
@@ -25,6 +26,7 @@ export default function ContentCard({
   description,
   image,
   category,
+  url,
 }: Props) {
 
   const dispatch = useDispatch();
@@ -45,7 +47,7 @@ export default function ContentCard({
       <img
         src={image}
         alt={title}
-        className="w-full h-52 object-cover"
+        className="w-full h-52 object-contain"
       />
 
       <div className="p-5">
@@ -63,14 +65,14 @@ export default function ContentCard({
                   description,
                   image,
                   category,
+                  url,
                 })
               )
             }
-            className={`transition ${
-              isFavorite
+            className={`transition ${isFavorite
                 ? "text-red-500"
                 : "hover:text-red-500"
-            }`}
+              }`}
           >
             <Heart
               size={20}
@@ -87,9 +89,14 @@ export default function ContentCard({
           {description}
         </p>
 
-        <button className="px-4 py-2 rounded-xl bg-black text-white dark:bg-white dark:text-black text-sm font-medium">
+        <a
+          href={url}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-block px-4 py-2 rounded-xl bg-black text-white dark:bg-white dark:text-black text-sm font-medium"
+        >
           Read More
-        </button>
+        </a>
       </div>
     </motion.div>
   );

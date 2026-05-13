@@ -42,6 +42,7 @@ export default function Favorites() {
               description={item.description}
               image={item.image}
               category={item.category}
+              url={item.url}
             />
           ))}
         </div>

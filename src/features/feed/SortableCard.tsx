@@ -15,6 +15,7 @@ interface Props {
     description: string;
     image: string;
     category: string;
+    url: string;
   };
 }
 
@@ -50,6 +51,7 @@ export default function SortableCard({
         description={item.description}
         image={item.image}
         category={item.category}
+        url={item.url}
       />
     </div>
   );

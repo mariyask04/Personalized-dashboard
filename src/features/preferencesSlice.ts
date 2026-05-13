@@ -1,27 +1,27 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 
 interface PreferencesState {
-  categories: string[];
+  selectedCategory: string;
 }
 
 const initialState: PreferencesState = {
-  categories: ["technology"],
+  selectedCategory: "all",
 };
 
 const preferencesSlice = createSlice({
   name: "preferences",
+
   initialState,
+
   reducers: {
-    setCategories: (
-      state,
-      action: PayloadAction<string[]>
-    ) => {
-      state.categories = action.payload;
+    setCategory: (state, action) => {
+      state.selectedCategory =
+        action.payload;
     },
   },
 });
 
-export const { setCategories } =
+export const { setCategory } =
   preferencesSlice.actions;
 
 export default preferencesSlice.reducer;
