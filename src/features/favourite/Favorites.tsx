@@ -1,5 +1,7 @@
 "use client";
 
+import { useEffect, useState } from "react";
+
 import { useSelector } from "react-redux";
 
 import { RootState } from "@/redux/store";
@@ -8,9 +10,17 @@ import ContentCard from "@/components/ui/ContentCard";
 
 export default function Favorites() {
 
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   const favorites = useSelector(
     (state: RootState) => state.favorites.items
   );
+
+  if(!mounted) return null;
 
   return (
     <div className="mt-12">
