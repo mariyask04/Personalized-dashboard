@@ -18,6 +18,7 @@ export default function Feed() {
         {mockFeed.map((item) => (
           <ContentCard
             key={item.id}
+            id={item.id}
             title={item.title}
             description={item.description}
             image={item.image}

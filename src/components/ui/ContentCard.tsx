@@ -3,7 +3,16 @@
 import { motion } from "framer-motion";
 import { Heart } from "lucide-react";
 
+import { useDispatch, useSelector } from "react-redux";
+
+import { RootState } from "@/redux/store";
+
+import {
+  toggleFavorite,
+} from "../../features/favoritesSlice";
+
 interface Props {
+  id: number;
   title: string;
   description: string;
   image: string;
@@ -11,11 +20,23 @@ interface Props {
 }
 
 export default function ContentCard({
+  id,
   title,
   description,
   image,
   category,
 }: Props) {
+
+  const dispatch = useDispatch();
+
+  const favorites = useSelector(
+    (state: RootState) => state.favorites.items
+  );
+
+  const isFavorite = favorites.some(
+    (item) => item.id === id
+  );
+
   return (
     <motion.div
       whileHover={{ y: -5 }}
@@ -33,8 +54,28 @@ export default function ContentCard({
             {category}
           </span>
 
-          <button className="hover:text-red-500 transition">
-            <Heart size={20} />
+          <button
+            onClick={() =>
+              dispatch(
+                toggleFavorite({
+                  id,
+                  title,
+                  description,
+                  image,
+                  category,
+                })
+              )
+            }
+            className={`transition ${
+              isFavorite
+                ? "text-red-500"
+                : "hover:text-red-500"
+            }`}
+          >
+            <Heart
+              size={20}
+              fill={isFavorite ? "currentColor" : "none"}
+            />
           </button>
         </div>
 
