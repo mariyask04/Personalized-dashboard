@@ -4,6 +4,7 @@ import themeReducer from "../features/themeSlice";
 import preferencesReducer from "../features/preferencesSlice";
 import favoritesReducer from "../features/favoritesSlice";
 import searchReducer from "../features/searchSlice";
+import feedReducer from "../features/feedSlice";
 
 export const store = configureStore({
   reducer: {
@@ -11,6 +12,7 @@ export const store = configureStore({
     preferences: preferencesReducer,
     favorites: favoritesReducer,
     search: searchReducer,
+    feed: feedReducer,
   },
 });
 

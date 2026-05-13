@@ -1,20 +1,45 @@
 "use client";
 
-import { useSelector } from "react-redux";
+import { useEffect, useState } from "react";
+
+import {
+  DndContext,
+  closestCenter,
+} from "@dnd-kit/core";
+
+import {
+  arrayMove,
+  SortableContext,
+  rectSortingStrategy,
+} from "@dnd-kit/sortable";
+
+import { useDispatch, useSelector } from "react-redux";
 
 import { RootState } from "@/redux/store";
 
-import ContentCard from "@/components/ui/ContentCard";
+import { setFeed } from "@/features/feedSlice";
 
-import { mockFeed } from "./MockData";
+import SortableCard from "./SortableCard";
 
 export default function Feed() {
+
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  const dispatch = useDispatch();
 
   const query = useSelector(
     (state: RootState) => state.search.query
   );
 
-  const filteredFeed = mockFeed.filter((item) => {
+  const feed = useSelector(
+    (state: RootState) => state.feed.items
+  );
+
+  const filteredFeed = feed.filter((item) => {
     const search = query.toLowerCase();
 
     return (
@@ -23,6 +48,31 @@ export default function Feed() {
       item.description.toLowerCase().includes(search)
     );
   });
+
+  function handleDragEnd(event: any) {
+
+    const { active, over } = event;
+
+    if (!over || active.id === over.id) return;
+
+    const oldIndex = feed.findIndex(
+      (item) => item.id === active.id
+    );
+
+    const newIndex = feed.findIndex(
+      (item) => item.id === over.id
+    );
+
+    const newFeed = arrayMove(
+      feed,
+      oldIndex,
+      newIndex
+    );
+
+    dispatch(setFeed(newFeed));
+  }
+
+  if (!mounted) return null;
 
   return (
     <div>
@@ -41,18 +91,26 @@ export default function Feed() {
           No content found.
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-          {filteredFeed.map((item) => (
-            <ContentCard
-              key={item.id}
-              id={item.id}
-              title={item.title}
-              description={item.description}
-              image={item.image}
-              category={item.category}
-            />
-          ))}
-        </div>
+        <DndContext
+          collisionDetection={closestCenter}
+          onDragEnd={handleDragEnd}
+        >
+          <SortableContext
+            items={filteredFeed.map(
+              (item) => item.id
+            )}
+            strategy={rectSortingStrategy}
+          >
+            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+              {filteredFeed.map((item) => (
+                <SortableCard
+                  key={item.id}
+                  item={item}
+                />
+              ))}
+            </div>
+          </SortableContext>
+        </DndContext>
       )}
     </div>
   );
