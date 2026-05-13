@@ -1,6 +1,7 @@
 "use client";
 
 import CategoryFilters from "./CategoryFilters";
+import SkeletonCard from "@/components/ui/SkeletonCard";
 
 import {
   useEffect,
@@ -31,13 +32,19 @@ import SortableCard from "./SortableCard";
 
 export default function Feed() {
 
-  const [mounted, setMounted] =
-    useState(false);
+  const [mounted, setMounted] = useState(false);
+
+  const [page, setPage] = useState(1);
 
   const dispatch = useDispatch<any>();
 
   const query = useSelector(
     (state: RootState) => state.search.query
+  );
+
+  const selectedCategory = useSelector(
+    (state: RootState) =>
+      state.preferences.selectedCategory
   );
 
   const {
@@ -50,9 +57,28 @@ export default function Feed() {
 
   useEffect(() => {
     setMounted(true);
+  }, []);
 
-    dispatch(getNews("all"));
-  }, [dispatch]);
+  useEffect(() => {
+
+    if (!mounted) return;
+
+    dispatch(
+      getNews({
+        category: selectedCategory,
+        page: 1,
+      })
+    );
+
+  }, [
+    selectedCategory,
+    mounted,
+    dispatch,
+  ]);
+
+  useEffect(() => {
+    setPage(1);
+  }, [selectedCategory]);
 
   if (!mounted) return null;
 
@@ -99,6 +125,22 @@ export default function Feed() {
     dispatch(setFeed(newFeed));
   }
 
+  const handleLoadMore = async () => {
+
+    if (loading) return;
+
+    const nextPage = page + 1;
+
+    setPage(nextPage);
+
+    await dispatch(
+      getNews({
+        category: selectedCategory,
+        page: nextPage,
+      })
+    );
+  };
+
   return (
     <div>
 
@@ -111,8 +153,10 @@ export default function Feed() {
       </div>
 
       {loading && (
-        <div className="text-center py-20">
-          Loading content...
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+          {[...Array(6)].map((_, index) => (
+            <SkeletonCard key={index} />
+          ))}
         </div>
       )}
 
@@ -159,6 +203,20 @@ export default function Feed() {
                 )}
 
               </div>
+              {!loading &&
+                filteredFeed.length > 0 && (
+                  <div className="flex justify-center mt-10">
+
+                    <button
+                      onClick={handleLoadMore}
+                      disabled={loading}
+                      className="px-6 py-3 rounded-xl bg-black text-white dark:bg-white dark:text-black font-medium disabled:opacity-50"
+                    >
+                      Load More
+                    </button>
+
+                  </div>
+                )}
             </SortableContext>
           </DndContext>
         )}

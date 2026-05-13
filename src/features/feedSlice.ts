@@ -18,38 +18,83 @@ interface FeedState {
   items: FeedItem[];
   loading: boolean;
   error: string | null;
+  page: number;
 }
 
 const initialState: FeedState = {
   items: [],
   loading: false,
   error: null,
+  page: 1,
 };
 
 export const getNews = createAsyncThunk(
   "feed/getNews",
 
-  async (category: string) => {
+  async (
+    {
+      category,
+      page,
+    }: {
+      category: string;
+      page: number;
+    }
+  ) => {
 
-    const articles = await fetchNews(category);
+    try {
 
-    return articles.map(
-      (article: any, index: number) => ({
-        id: index + 1,
-        title: article.title,
-        description:
-          article.description ||
-          "No description available.",
-        image:
-          article.urlToImage ||
-          "https://via.placeholder.com/400",
-        category:
-          category === "all"
-            ? article.source?.name || "General"
-            : category,
-        url: article.url,
-      })
-    );
+      const articles = await fetchNews(
+        category,
+        page
+      );
+
+      return articles.map(
+        (article: any, index: number) => ({
+          id: page * 100 + index,
+
+          title:
+            article.title || "No Title",
+
+          description:
+            article.description ||
+            "No description available.",
+
+          image:
+            article.urlToImage ||
+            "https://via.placeholder.com/400",
+
+          category:
+            category === "all"
+              ? article.source?.name ||
+              "General"
+              : category,
+
+          url:
+            article.url || "#",
+        })
+      );
+
+    } catch (error) {
+
+      return [
+        {
+          id: page * 100 + 1,
+
+          title:
+            "Demo Content Available",
+
+          description:
+            "NewsAPI rate limit reached. Showing fallback dashboard content.",
+
+          image:
+            "https://via.placeholder.com/400",
+
+          category,
+
+          url: "#",
+        },
+      ];
+    }
   }
 );
 
@@ -76,7 +121,14 @@ const feedSlice = createSlice({
         action
       ) => {
         state.loading = false;
-        state.items = action.payload;
+        if (action.meta.arg.page === 1) {
+          state.items = action.payload;
+        } else {
+          state.items = [
+            ...state.items,
+            ...action.payload,
+          ];
+        }
       })
 
       .addCase(getNews.rejected, (

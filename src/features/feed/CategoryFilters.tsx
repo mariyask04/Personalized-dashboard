@@ -33,7 +33,10 @@ export default function CategoryFilters() {
 
         dispatch(setCategory(category));
 
-        dispatch(getNews(category));
+        window.scrollTo({
+            top: 0,
+            behavior: "smooth",
+        });
     };
 
     return (
@@ -47,8 +50,8 @@ export default function CategoryFilters() {
                         handleCategoryClick(category)
                     }
                     className={`px-4 py-2 rounded-full capitalize transition ${selectedCategory === category
-                            ? "bg-black text-white dark:bg-white dark:text-black"
-                            : "bg-zinc-200 dark:bg-zinc-800"
+                        ? "bg-black text-white dark:bg-white dark:text-black"
+                        : "bg-zinc-200 dark:bg-zinc-800"
                         }`}
                 >
                     {category}
