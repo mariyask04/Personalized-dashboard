@@ -1,5 +1,12 @@
 import axios from "axios";
 
-const response = await axios.get(
-  "/api/news"
-);
+export const fetchNews = async (category: string, page: number) => {
+  const response = await axios.get("/api/news", {
+    params: {
+      category,
+      page,
+    },
+  });
+
+  return response.data.articles;
+};
