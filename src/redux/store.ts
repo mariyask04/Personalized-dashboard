@@ -35,6 +35,7 @@ store.subscribe(() => {
     theme: store.getState().theme,
     favorites: store.getState().favorites,
     preferences: store.getState().preferences,
+    search: store.getState().search,
     feed: store.getState().feed,
   });
 });
