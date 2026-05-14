@@ -32,7 +32,7 @@ npm test
 npx playwright test
 
 ## Live Demo
-(Add Vercel link)
+
 
 ## Screenshots
-(Add screenshots)
+Project screenshots in 'public/screenshots' folder
