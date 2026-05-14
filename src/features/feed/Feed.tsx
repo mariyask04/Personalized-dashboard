@@ -30,6 +30,8 @@ import {
 
 import SortableCard from "./SortableCard";
 
+import toast from "react-hot-toast";
+
 export default function Feed() {
 
   const [mounted, setMounted] = useState(false);
@@ -139,6 +141,7 @@ export default function Feed() {
         page: nextPage,
       })
     );
+    toast.success("More content loaded");
   };
 
   return (

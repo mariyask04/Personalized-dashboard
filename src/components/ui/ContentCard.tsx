@@ -11,6 +11,8 @@ import {
   toggleFavorite,
 } from "../../features/favoritesSlice";
 
+import { toast } from "react-hot-toast";
+
 interface Props {
   id: number;
   title: string;
@@ -57,7 +59,8 @@ export default function ContentCard({
           </span>
 
           <button
-            onClick={() =>
+            onClick={() => {
+
               dispatch(
                 toggleFavorite({
                   id,
@@ -67,11 +70,17 @@ export default function ContentCard({
                   category,
                   url,
                 })
-              )
-            }
+              );
+
+              toast.success(
+                isFavorite
+                  ? "Removed from favorites"
+                  : "Added to favorites"
+              );
+            }}
             className={`transition ${isFavorite
-                ? "text-red-500"
-                : "hover:text-red-500"
+              ? "text-red-500"
+              : "hover:text-red-500"
               }`}
           >
             <Heart
