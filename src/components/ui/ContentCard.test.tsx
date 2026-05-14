@@ -11,8 +11,6 @@ import ContentCard from "./ContentCard";
 
 import userEvent from "@testing-library/user-event";
 
-import { Heart } from "lucide-react";
-
 describe(
     "ContentCard",
     () => {

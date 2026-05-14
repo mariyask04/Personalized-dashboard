@@ -12,6 +12,7 @@ import {
 } from "../../features/favoritesSlice";
 
 import { toast } from "react-hot-toast";
+import Image from "next/image";
 
 interface Props {
   id: number;
@@ -46,9 +47,11 @@ export default function ContentCard({
       whileHover={{ y: -5 }}
       className="bg-white dark:bg-zinc-900 rounded-2xl overflow-hidden shadow-sm border border-zinc-200 dark:border-zinc-800"
     >
-      <img
+      <Image
         src={image}
         alt={title}
+        width={500}
+        height={300}
         className="w-full h-52 object-contain"
       />
 

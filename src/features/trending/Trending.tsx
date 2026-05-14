@@ -5,11 +5,18 @@ import { motion } from "framer-motion";
 import { useSelector } from "react-redux";
 
 import { RootState } from "@/redux/store";
-import { useState, useEffect } from "react";
+
+import Image from "next/image";
+
+import {
+  useEffect,
+  useState,
+} from "react";
 
 export default function Trending() {
 
-  const [mounted, setMounted] = useState(false);
+  const [mounted, setMounted] =
+    useState(false);
 
   useEffect(() => {
     setMounted(true);
@@ -20,13 +27,16 @@ export default function Trending() {
       state.feed.items
   );
 
-  const trendingItems = items.slice(0, 5);
+  const trendingItems =
+    items.slice(0, 5);
 
   if (!mounted) return null;
 
   return (
-    <div className="mb-12">
-
+    <div
+      id="trending"
+      className="mb-12"
+    >
       <h2 className="text-2xl font-bold mb-6">
         Trending Now
       </h2>
@@ -40,12 +50,15 @@ export default function Trending() {
             whileHover={{
               scale: 1.03,
             }}
+            initial={false}
             className="bg-white dark:bg-zinc-900 rounded-2xl overflow-hidden border border-zinc-200 dark:border-zinc-800"
           >
 
-            <img
+            <Image
               src={item.image}
               alt={item.title}
+              width={1200}
+              height={700}
               className="h-40 w-full object-contain"
             />
 
@@ -60,6 +73,7 @@ export default function Trending() {
               </h3>
 
             </div>
+
           </motion.div>
 
         ))}

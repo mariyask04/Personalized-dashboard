@@ -2,11 +2,10 @@
 
 import { useDispatch, useSelector } from "react-redux";
 
-import { RootState } from "@/redux/store";
+import { AppDispatch, RootState } from "@/redux/store";
 
 import { setCategory } from "@/features/preferencesSlice";
-
-import { getNews } from "@/features/feedSlice";
+import { getNews } from "../feedSlice";
 
 const categories = [
     "all",
@@ -20,7 +19,7 @@ const categories = [
 
 export default function CategoryFilters() {
 
-    const dispatch = useDispatch<any>();
+    const dispatch = useDispatch<AppDispatch>();
 
     const selectedCategory = useSelector(
         (state: RootState) =>
@@ -33,12 +32,19 @@ export default function CategoryFilters() {
 
         dispatch(setCategory(category));
 
+        dispatch(
+            getNews({
+                category,
+                page: 1,
+            })
+        );
+
         window.scrollTo({
             top: 0,
             behavior: "smooth",
         });
     };
-
+    
     return (
         <div className="flex flex-wrap gap-3 mb-8">
 

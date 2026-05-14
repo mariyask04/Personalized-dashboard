@@ -1,9 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
-
 import {
-  Bell,
   Moon,
   Search,
   Sun,
@@ -24,12 +21,6 @@ import { setSearchQuery } from "@/features/searchSlice";
 
 export default function Header() {
 
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
   const dispatch = useDispatch();
 
   const darkMode = useSelector(
@@ -42,8 +33,6 @@ export default function Header() {
     },
     500
   );
-
-  if (!mounted) return null;
   
   return (
     <header className="flex items-center justify-between p-4 border-b border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900">
@@ -73,14 +62,6 @@ export default function Header() {
             <Moon size={20} />
           )}
         </button>
-
-        <button className="p-2 rounded-full hover:bg-zinc-100 dark:hover:bg-zinc-800">
-          <Bell size={20} />
-        </button>
-
-        <div className="w-10 h-10 rounded-full bg-black text-white flex items-center justify-center font-bold">
-          M
-        </div>
       </div>
     </header>
   );

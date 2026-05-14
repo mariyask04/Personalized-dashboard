@@ -8,11 +8,19 @@ import {
 import { motion } from "framer-motion";
 
 import { fetchTrendingMovies } from "@/services/tmdbApi";
+import Image from "next/image";
+
+interface Movie {
+  id: number;
+  title: string;
+  poster_path: string;
+  vote_average: number;
+}
 
 export default function Movies() {
 
   const [movies, setMovies] =
-    useState<any[]>([]);
+    useState<Movie[]>([]);
 
   useEffect(() => {
 
@@ -26,7 +34,7 @@ export default function Movies() {
 
           setMovies(data);
 
-        } catch (error) {
+        } catch (error: unknown) {
           console.log(error);
         }
       };
@@ -55,9 +63,11 @@ export default function Movies() {
               className="bg-white dark:bg-zinc-900 rounded-2xl overflow-hidden border border-zinc-200 dark:border-zinc-800"
             >
 
-              <img
+              <Image
                 src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
                 alt={movie.title}
+                width={500}
+                height={700}
                 className="h-72 w-full object-contain"
               />
 

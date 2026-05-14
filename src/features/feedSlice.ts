@@ -49,7 +49,15 @@ export const getNews = createAsyncThunk(
       );
 
       return articles.map(
-        (article: any, index: number) => ({
+        (article: {
+          title: string;
+          description: string;
+          urlToImage: string;
+          url: string;
+          source?: {
+            name?: string;
+          };
+        }, index: number) => ({
           id: page * 100 + index,
 
           title:
@@ -74,7 +82,7 @@ export const getNews = createAsyncThunk(
         })
       );
 
-    } catch (error) {
+    } catch {
 
       return [
         {

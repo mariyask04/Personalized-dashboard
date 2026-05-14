@@ -11,6 +11,7 @@ import {
 import {
   DndContext,
   closestCenter,
+  DragEndEvent,
 } from "@dnd-kit/core";
 
 import {
@@ -21,7 +22,7 @@ import {
 
 import { useDispatch, useSelector } from "react-redux";
 
-import { RootState } from "@/redux/store";
+import { AppDispatch, RootState } from "@/redux/store";
 
 import {
   getNews,
@@ -34,11 +35,9 @@ import toast from "react-hot-toast";
 
 export default function Feed() {
 
-  const [mounted, setMounted] = useState(false);
-
   const [page, setPage] = useState(1);
 
-  const dispatch = useDispatch<any>();
+  const dispatch = useDispatch<AppDispatch>();
 
   const query = useSelector(
     (state: RootState) => state.search.query
@@ -58,12 +57,6 @@ export default function Feed() {
   );
 
   useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  useEffect(() => {
-
-    if (!mounted) return;
 
     dispatch(
       getNews({
@@ -74,15 +67,8 @@ export default function Feed() {
 
   }, [
     selectedCategory,
-    mounted,
     dispatch,
   ]);
-
-  useEffect(() => {
-    setPage(1);
-  }, [selectedCategory]);
-
-  if (!mounted) return null;
 
   const filteredFeed = items.filter((item) => {
 
@@ -103,7 +89,9 @@ export default function Feed() {
     );
   });
 
-  function handleDragEnd(event: any) {
+  function handleDragEnd(
+    event: DragEndEvent
+  ) {
 
     const { active, over } = event;
 

@@ -1,3 +1,5 @@
+import { RootState } from "@/redux/store";
+
 export const loadState = () => {
   try {
     const serializedState =
@@ -6,12 +8,12 @@ export const loadState = () => {
     if (!serializedState) return undefined;
 
     return JSON.parse(serializedState);
-  } catch (error) {
+  } catch {
     return undefined;
   }
 };
 
-export const saveState = (state: any) => {
+export const saveState = (state: RootState) => {
   try {
     const serializedState =
       JSON.stringify(state);
@@ -20,7 +22,7 @@ export const saveState = (state: any) => {
       "dashboardState",
       serializedState
     );
-  } catch (error) {
+  } catch (error: unknown) {
     console.log(error);
   }
 };

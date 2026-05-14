@@ -27,7 +27,7 @@ const rootReducer = combineReducers({
 export const store = configureStore({
   reducer: rootReducer,
 
-  preloadedState: persistedState as any,
+  preloadedState: persistedState,
 });
 
 store.subscribe(() => {
